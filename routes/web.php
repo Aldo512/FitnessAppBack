@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\NutritionPlansController;
+use App\Http\Controllers\TestingController;
 use Illuminate\Support\Facades\Route;
 
 /*
