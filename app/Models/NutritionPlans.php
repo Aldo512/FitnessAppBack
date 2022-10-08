@@ -16,7 +16,8 @@ class NutritionPlans extends Model
 
     protected $fillable = [
         'title',
-        'description'
+        'description',
+        'body'
     ];
 
     protected $dates = ['deleted_at'];

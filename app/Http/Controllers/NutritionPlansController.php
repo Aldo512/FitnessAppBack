@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\NutritionPlans;
 use App\Http\Requests\StoreNutritionPlansRequest;
 use App\Http\Requests\UpdateNutritionPlansRequest;
+use Illuminate\Http\Request;
 
 class NutritionPlansController extends Controller
 {
@@ -20,19 +21,19 @@ class NutritionPlansController extends Controller
 
     public function store(StoreNutritionPlansRequest $request)
     {
-        NutritionPlans::create($request);
-        return 'OK';
+        $nutritionPlan = NutritionPlans::create($request->all());
+        return $nutritionPlan;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\NutritionPlans  $nutritionPlans
+     * @param  \App\Models\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show(NutritionPlans $nutritionPlans)
+    public function show(Request $request, $id)
     {
-        //
+        return NutritionPlans::findOrFail($id);
     }
 
     /**

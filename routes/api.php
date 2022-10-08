@@ -21,5 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/testing', [TestingController::class, 'index']);
-    Route::get('/nutrition_plan', [NutritionPlansController::class, 'index']);
+    Route::resource('/nutrition_plan', NutritionPlansController::class);
 });
