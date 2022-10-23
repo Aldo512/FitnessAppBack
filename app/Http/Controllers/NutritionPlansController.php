@@ -6,6 +6,7 @@ use App\Models\NutritionPlans;
 use App\Http\Requests\StoreNutritionPlansRequest;
 use App\Http\Requests\UpdateNutritionPlansRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class NutritionPlansController extends Controller
 {
@@ -21,8 +22,15 @@ class NutritionPlansController extends Controller
 
     public function store(StoreNutritionPlansRequest $request)
     {
-        $nutritionPlan = NutritionPlans::create($request->all());
-        return $nutritionPlan;
+        DB::beginTransaction();
+        try {
+            $nutritionPlan = NutritionPlans::create($request->all());
+            DB::commit();
+            return $nutritionPlan;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -56,17 +64,35 @@ class NutritionPlansController extends Controller
      */
     public function update(UpdateNutritionPlansRequest $request, NutritionPlans $nutritionPlans)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $nutritionPlan = NutritionPlans::findOrFail($request->get('id'));
+            $nutritionPlan->update($request->all());
+            DB::commit();
+            return $nutritionPlan;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $e->getMessage();
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\NutritionPlans  $nutritionPlans
+     * @param  integer  $is
      * @return \Illuminate\Http\Response
      */
-    public function destroy(NutritionPlans $nutritionPlans)
+    public function destroy($id)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $plan = NutritionPlans::findOrFail($id);
+            $plan->delete();
+            DB::commit();
+            return $plan;
+        } catch (\Error $e) {
+            DB::rollBack();
+            return $this->sendError($e->getMessage());
+        }
     }
 }
